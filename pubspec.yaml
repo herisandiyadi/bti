@@ -31,15 +31,18 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.2
   file_picker: ^5.2.4
+  firebase_analytics: ^10.0.8
   firebase_core: ^2.4.0
   firebase_messaging: ^14.2.0
   flutter:
     sdk: flutter
   flutter_contacts: ^1.1.5+1
+  flutter_local_notifications: ^13.0.0
   geolocator: ^9.0.2
   google_maps_flutter: ^2.2.2
   http: ^0.13.5
   image_picker: ^0.8.6
+  overlay_support: ^2.1.0
   permission_handler: ^10.2.0
   photo_gallery: ^1.1.1
   share_files_and_screenshot_widgets: ^1.0.6

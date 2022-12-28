@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,6 +42,8 @@ class _HomePageState extends State<HomePage> {
   bool _permissionDenied = false;
   String? tokenFcm;
   FcmServices fcmServices = FcmServices();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<bool> _promptPermissionSetting() async {
     if (Platform.isIOS &&
@@ -71,13 +74,16 @@ class _HomePageState extends State<HomePage> {
   Future getFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     final nameFile = result!.files.single.name;
-    setState(() {
-      if (result != null) {
-        image = File(result.files.single.path!);
 
+    if (result != null) {
+      image = File(result.files.single.path!);
+      setState(() {
         filenm = nameFile;
-      }
-    });
+      });
+    }
+    if (filenm != null) {
+      documentsModal();
+    }
   }
 
   void _getCurrentLocation() async {
@@ -128,14 +134,9 @@ class _HomePageState extends State<HomePage> {
     _getCurrentLocation();
     initAsync();
     getToken();
+    notif();
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {});
-
-    FirebaseMessaging.onMessage.listen((event) {
-      if (event.notification != null) {
-        print(event.notification!.title);
-      }
-    });
   }
 
   final Completer<GoogleMapController> _controller = Completer();
@@ -194,12 +195,74 @@ class _HomePageState extends State<HomePage> {
       badge: true,
       sound: true,
     );
+  }
+
+  void notif() {
     FirebaseMessaging.onMessage.listen((event) {
-      print(event.notification!.title);
-      if (event.notification != null) {
-        print(event.notification!.title);
+      print("onMessage: $event.");
+      RemoteNotification? notification = event.notification;
+      AndroidNotification? android = event.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              'channel.id',
+              ' channel.name',
+              icon: 'launch_background',
+            ),
+          ),
+        );
       }
     });
+  }
+
+  void documentsModal() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+              height: 200,
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.description,
+                    size: 64,
+                  ),
+                  Text(filenm!),
+                  ElevatedButton(
+                      onPressed: () {
+                        listObject.add(Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: SizedBox(
+                            width: 100,
+                            height: 150,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  const Icon(
+                                    Icons.description,
+                                    size: 64,
+                                  ),
+                                  Text(filenm!)
+                                ],
+                              ),
+                            ),
+                          ),
+                        ));
+
+                        fcmServices.sendNotif(tokenFcm!, 'ada pesan', 'name');
+
+                        setState(() {});
+                        filenm = null;
+                        Navigator.pop(context);
+                      },
+                      child: const Text('ok'))
+                ],
+              ));
+        });
   }
 
   @override
@@ -265,6 +328,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             Navigator.pop(context);
           });
+          fcmServices.sendNotif(tokenFcm!, 'ada pesan', 'name');
         },
         child: Container(
           child: Image.asset(
@@ -287,6 +351,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             Navigator.pop(context);
           });
+          fcmServices.sendNotif(tokenFcm!, 'ada pesan', 'name');
         },
         child: Container(
           child: Image.asset(
@@ -363,6 +428,7 @@ class _HomePageState extends State<HomePage> {
                       );
                       setState(() {});
                       Navigator.pop(context);
+                      fcmServices.sendNotif(tokenFcm!, 'ada pesan', 'name');
                       print(imageFile);
                     },
                     child: Text('OK'),
@@ -396,6 +462,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                     setState(() {});
+                    fcmServices.sendNotif(tokenFcm!, 'ada pesan', 'name');
                     Navigator.pop(context);
                   },
                   child: Padding(
@@ -428,6 +495,7 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     listObject.clear();
                   });
+                  fcmServices.sendNotif(tokenFcm!, 'ada pesan', 'name');
                 },
                 icon: Icon(Icons.arrow_back_ios),
               ),
@@ -503,23 +571,6 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () {
                   getFile();
-                  listObject.add(Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: SizedBox(
-                      width: 100,
-                      height: 150,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            const Icon(Icons.description),
-                            Text(filenm!)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ));
-                  setState(() {});
-                  filenm = null;
                 },
                 child: Column(
                   children: const [

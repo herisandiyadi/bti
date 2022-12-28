@@ -13,6 +13,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (notification != null && android != null && !message.data.isEmpty) {
+      print('Message data: ${message.data}');
+    }
+  });
   await requestPermission();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -38,6 +47,15 @@ Future<void> requestPermission() async {
   } else {
     print('User declined or has not accepted permission');
   }
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (notification != null && android != null && !message.data.isEmpty) {
+      print('Message data: ${message.data}');
+    }
+  });
 }
 
 class MyApp extends StatefulWidget {
