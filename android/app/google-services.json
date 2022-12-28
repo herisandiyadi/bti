@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "510315192296",
+    "project_id": "fcm-test-ca62a",
+    "storage_bucket": "fcm-test-ca62a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510315192296:android:e11374eeb642f5e6484e5d",
+        "android_client_info": {
+          "package_name": "com.example.bti_test_kosong_satu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510315192296-hotpt8b5csst5t1g0f3vchs0o6t8cnel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMNDvaV1FtfCtrJ0CyiQr7QxO5wysdvNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510315192296-hotpt8b5csst5t1g0f3vchs0o6t8cnel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510315192296:android:dd26a9f9c77c286f484e5d",
+        "android_client_info": {
+          "package_name": "com.example.fcm_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510315192296-hotpt8b5csst5t1g0f3vchs0o6t8cnel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMNDvaV1FtfCtrJ0CyiQr7QxO5wysdvNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510315192296-hotpt8b5csst5t1g0f3vchs0o6t8cnel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
